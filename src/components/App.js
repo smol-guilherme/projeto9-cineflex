@@ -11,11 +11,11 @@ export default function App() {
     
     return (
         <BrowserRouter>
-            <Main />
+            <Header />
             <Routes>
-                <Route path="/" element={<Header />} />
-                <Route path="/filme/:id" element={<Schedule />} />
-                <Route path="/sessao/:sid" element={<Reservation />} />
+                <Route path="/" element={<Main />} />
+                <Route path="/filme/:idMovie" element={<Schedule />} />
+                <Route path="/sessao/:idSession" element={<Reservation />} />
                 <Route path="/sucesso" element={<Success />} />
             </Routes>
         </BrowserRouter>

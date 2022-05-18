@@ -1,41 +1,37 @@
 import { Link } from 'react-router-dom';
+import { useState, useEffect } from 'react';
+import axios from 'axios';
+
+const BASE_URL = 'https://mock-api.driven.com.br/api/v5/cineflex/' // movies
+
+function Poster({ id, poster }) {
+    return(
+        <div className='poster'>
+            <Link to={`/filme/${id}`} >
+                <img src={poster} />
+            </Link>
+        </div> 
+    )
+}
 
 export default function Main() {
-    const movies = [
-        {
-            id: 1,
-            title: 'filme de super heroi generico',
-            posterUrl: 'https://www.themoviedb.org/t/p/w600_and_h900_bestv2/tnAuB8q5vv7Ax9UAEje5Xi4BXik.jpg',
-            overview: 'mais um filme igual a todos os outros que voce ja viu',
-            releaseDate: '2021-03-18T00:00:00.000Z'
-        },
-        {
-            id: 2,
-            title: 'filme de super heroi generico 2',
-            posterUrl: 'https://www.themoviedb.org/t/p/w600_and_h900_bestv2/tnAuB8q5vv7Ax9UAEje5Xi4BXik.jpg',
-            overview: 'mais um filme igual a todos os outros que voce ja viu',
-            releaseDate: '2021-04-18T00:00:00.000Z'
-        },
-        {
-            id: 3,
-            title: 'filme de super heroi com mais tela verde',
-            posterUrl: 'https://www.themoviedb.org/t/p/w600_and_h900_bestv2/tnAuB8q5vv7Ax9UAEje5Xi4BXik.jpg',
-            overview: 'mais um filme igual a todos os outros que voce ja viu',
-            releaseDate: '2021-05-19T00:00:00.000Z'
-        },
-        {
-            id: 4,
-            title: 'tela verde, o filme',
-            posterUrl: 'https://www.themoviedb.org/t/p/w600_and_h900_bestv2/tnAuB8q5vv7Ax9UAEje5Xi4BXik.jpg',
-            overview: 'mais um filme igual a todos os outros que voce ja viu',
-            releaseDate: '2021-04-15T00:00:00.000Z'
-        }
-    ];
+    const [movies, setMovies] = useState([]);
+
+    useEffect(() => {
+        const promise = axios.get(BASE_URL+'movies')
+        promise.then(response => {
+            setMovies(response.data)
+        })
+    }, [])
 
     return (
-        <div>
+        <div className='content'>
             <h1>Selecione o filme</h1>
-            { movies.map((item, index) => <Link to={`/filme/${item.id}`} key={index} release={item.releaseDate} ><img src={item.posterUrl} /></Link>)}
+            <div className='posters'>
+                { 
+                    movies.map((item, index) => <Poster key={index} id={item.id} poster={item.posterURL} />
+                )}
+            </div>
         </div>
     )
 }

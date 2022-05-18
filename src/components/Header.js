@@ -1,7 +1,7 @@
 export default function Header() {
     return(
-        <div>
-            cineflex
+        <div className="header">
+            CINEFLEX
         </div>
     )
 }
