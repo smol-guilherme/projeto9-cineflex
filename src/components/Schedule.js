@@ -1,28 +1,20 @@
 import { Link, useParams } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import axios from 'axios';
+import styled from 'styled-components'
+
+import Footer from './Footer';
 
 const BASE_URL = 'https://mock-api.driven.com.br/api/v5/cineflex/' // movies/id/showtime
 
 function Session({ weekday, date, showtimes }) {
     return(
-        <div className='session-box'>
+        <Container>
             {`${weekday} - ${date}`}
-            <div className='button-box'>
-                { showtimes.map((time) => <Link className='button' to={`/sessao/${time.id}`} key={time.id} id={time.id}> {time.name} </Link> )}
-            </div>
-        </div>
-    )
-}
-
-function Footer({ poster, title }) {
-    return(
-        <div className="footer">
-            <div className="poster mini">
-                <img src={poster} />
-            </div>
-            { title }
-        </div>
+            <Buttons>
+                { showtimes.map((time) => <Button><Link style={ { textDecoration: 'none', color: '#FFFFFF' } } to={`/sessao/${time.id}`} key={time.id}>{time.name}</Link></Button> )}
+            </Buttons>
+        </Container>
     )
 }
 
@@ -41,10 +33,63 @@ export default function Schedule() {
     }, []);
 
     return(
-        <div className='content with-footer'>
-            <h1>Selecione o horário</h1>
+        <Content>
+            <Header>Selecione o horário</Header>
             { schedule.map((item) => <Session key={item.id} weekday={item.weekday} date={item.date} showtimes={item.showtimes}  /> ) }
             <Footer title={movie.title} poster={movie.posterURL} />
-        </div>
+        </Content>
     )
 }
+
+const Content = styled.div`
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin: 10vh auto;
+    margin-bottom: 14vh;
+    width: 100%;
+    background-color: #FFFFFF;
+`
+
+const Container = styled.div`
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    padding: 10px;
+    font-size: 20px;
+    box-sizing: border-box;
+`
+
+const Buttons = styled.div`
+    display: flex;
+    justify-content: left;
+    margin-top: 20px;
+    align-items: center;
+`
+
+const Button = styled.div`
+    display: flex;
+    height: 32px;
+    width: 64px;
+    justify-content: center;
+    align-items: center;
+    margin: 2px 8px 8px 0;
+    border-radius: 2px;
+    background-color: #E8833A;
+    font-size: 18px;
+
+    &:hover {
+        cursor: pointer;
+    }
+`
+
+const Header = styled.div`
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 80px;
+    width: 100%;
+    text-align: center;
+    font-size: 24px;
+`

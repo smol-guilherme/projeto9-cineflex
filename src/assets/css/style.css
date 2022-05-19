@@ -60,13 +60,21 @@ h1 {
     background-color: #FFFFFF;
     box-shadow: 0 0 2px 2px #33333360;
     border-radius: 5px;
-    box-sizing: border-box;
 }
 
 .poster img {
     width: 100%;
     height: 100%;
     object-fit: contain;
+}
+
+.mini {
+    width: 65px;
+    height: 80px;
+    margin: 0 5px;
+    padding: 3px;
+    box-shadow: 0 0 1px 1px #33333360;
+    border-radius: 2px;
 }
 
 .footer {
@@ -100,6 +108,42 @@ h1 {
     align-items: center;
 }
 
+.seats {
+    display: flex;
+    flex-wrap: wrap;
+    width: 100%;
+    height: auto;
+    margin: 20px 10px;
+}
+
+.seat-icon {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 50%;
+    width: 25px;
+    height: 25px;
+    font-size: 11px;
+    color: black;
+    background-color: #C3CFD9;
+    border: 1px solid #808F9D;
+    margin: 5px;
+}
+
+.unavailable {
+    background-color: #FBE192;
+    border: 1px solid #F7C52B;
+}
+
+.tooltip {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    width: 100%;
+    height: 30px;
+    margin: 10px 0;
+}
+
 .button {
     display: flex;
     height: 32px;
@@ -115,13 +159,4 @@ h1 {
 
 .button:hover {
     cursor: pointer;
-}
-
-.mini {
-    width: 65px;
-    height: 80px;
-    margin: 0 5px;
-    padding: 3px;
-    box-shadow: 0 0 1px 1px #33333360;
-    border-radius: 2px;
 }

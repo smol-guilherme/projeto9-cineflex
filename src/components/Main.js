@@ -1,16 +1,17 @@
 import { Link } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import axios from 'axios';
+import styled from 'styled-components';
 
-const BASE_URL = 'https://mock-api.driven.com.br/api/v5/cineflex/' // movies
+const BASE_URL = 'https://mock-api.driven.com.br/api/v5/cineflex/'
 
-function Poster({ id, poster }) {
+function Movie({ id, poster }) {
     return(
-        <div className='poster'>
+        <Poster>
             <Link to={`/filme/${id}`} >
                 <img src={poster} />
             </Link>
-        </div> 
+        </Poster> 
     )
 }
 
@@ -25,13 +26,59 @@ export default function Main() {
     }, [])
 
     return (
-        <div className='content'>
-            <h1>Selecione o filme</h1>
-            <div className='posters'>
+        <Content>
+            <Header>Selecione o filme</Header>
+            <Posters>
                 { 
-                    movies.map((item, index) => <Poster key={index} id={item.id} poster={item.posterURL} />
+                    movies.map((item, index) => <Movie key={index} id={item.id} poster={item.posterURL} />
                 )}
-            </div>
-        </div>
-    )
+            </Posters>
+        </Content>
+    );
 }
+
+const Content = styled.div`
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin: 10vh auto;
+    width: 100%;
+    background-color: #FFFFFF;
+`
+
+const Posters = styled.div`
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+`
+
+const Poster = styled.div`
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 140px;
+    height: 200px;
+    padding: 10px;
+    margin: 15px;
+    background-color: #FFFFFF;
+    box-shadow: 0 0 2px 2px #33333360;
+    border-radius: 5px;
+    box-sizing: border-box;
+
+    img {
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+    }
+`
+
+const Header = styled.div`
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 80px;
+    width: 100%;
+    text-align: center;
+    font-size: 24px;
+`
