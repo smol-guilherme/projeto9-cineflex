@@ -1,12 +1,15 @@
 import styled from 'styled-components';
 
-export default function Footer({ poster, title }) {
+export default function Footer({ poster, title, name = "", weekday }) {
     return(
         <Container>
             <Miniature>
                 <img src={poster} />
             </Miniature>
-            { title }
+            <Infobox>
+                <Info>{ title }</Info>
+                <Info>{ name.length === 0 ? "" : `${weekday, ' - ', name}`}</Info>
+            </Infobox>
         </Container>
     );
 }
@@ -45,3 +48,14 @@ const Miniature = styled.div`
         object-fit: contain;
     }
 `
+
+const Infobox = styled.div`
+    display: flex;
+    flex-direction: column;
+`
+
+const Info = styled.p`
+    display: flex;
+    width: 100%;
+`
+

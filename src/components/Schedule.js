@@ -12,7 +12,14 @@ function Session({ weekday, date, showtimes }) {
         <Container>
             {`${weekday} - ${date}`}
             <Buttons>
-                { showtimes.map((time) => <Button><Link style={ { textDecoration: 'none', color: '#FFFFFF' } } to={`/sessao/${time.id}`} key={time.id}>{time.name}</Link></Button> )}
+                { 
+                    showtimes.map((time) => 
+                        <Button key={time.id}>
+                            <Link style={ { textDecoration: 'none', color: '#FFFFFF' } } to={`/sessao/${time.id}`}>
+                                {time.name}
+                            </Link>
+                        </Button> )
+                }
             </Buttons>
         </Container>
     )
@@ -35,7 +42,7 @@ export default function Schedule() {
     return(
         <Content>
             <Header>Selecione o horário</Header>
-            { schedule.map((item) => <Session key={item.id} weekday={item.weekday} date={item.date} showtimes={item.showtimes}  /> ) }
+            { schedule.map((item,) => <Session key={item.id} weekday={item.weekday} date={item.date} showtimes={item.showtimes}  /> ) }
             <Footer title={movie.title} poster={movie.posterURL} />
         </Content>
     )
@@ -88,8 +95,9 @@ const Header = styled.div`
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 80px;
+    height: 30px;
     width: 100%;
+    margin-top: 30px;
     text-align: center;
     font-size: 24px;
 `
