@@ -1,18 +1,17 @@
-import { useParams, useNavigate, Link } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 import styled from 'styled-components';
 
 import Footer from './Footer';
-import Success from './Success';
 
 function Forms() {
     return(
         <>
                 <label>Nome do comprador:</label>
-                <input type='text' placeholder='Digite seu nome...' required></input>
+                <input type='text' placeholder='Digite seu nome...' required />
                 <label>CPF do comprador:</label>
-                <input type='number' placeholder='Digite ceu CPF' required></input>
+                <input type='number' placeholder='Digite ceu CPF' required />
         </>
     )
 }
@@ -32,11 +31,9 @@ export default function Reservation() {
     useEffect(() => {
         const promise = axios.get(BASE_URL+`showtimes/${idSession}/seats`)
         promise.then((response) => {
-            console.log(response.data)
             const newSeats = response.data.seats.map((item) => {
                 return {...item, isSelected: false}
             })
-            console.log(newSeats)
             setDay(response.data.day)
             setSession(response.data)
             setMovieData(response.data.movie)
@@ -55,7 +52,6 @@ export default function Reservation() {
             else
                 return seat
         });
-        console.log(newSeats)
         setSeats([...newSeats]);
     }
 
@@ -70,7 +66,6 @@ export default function Reservation() {
                 return null
             }
         })
-        console.log(formSeats)
         const buyerData = {};
         const buyers = [];
         for(let item of event.target) {
@@ -99,10 +94,9 @@ export default function Reservation() {
             name: name,
             cpf: cpf
         }
-        console.log(request)
+        // console.log(request)
         const promise = axios.post(BASE_URL+'seats/book-many', request);
         promise.then((response) => {
-            console.log(request, response.data)
             const info = {...request, ids: names }
             navigate("/sucesso", { replace: true, state: { movie: session, info: info }} )
         });
