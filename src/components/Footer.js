@@ -8,7 +8,7 @@ export default function Footer({ poster, title, name = "", weekday }) {
             </Miniature>
             <Infobox>
                 <Info>{ title }</Info>
-                <Info>{ name.length === 0 ? "" : `${weekday, ' - ', name}`}</Info>
+                <Info>{ name.length === 0 ? "" : `${weekday} - ${name}` }</Info>
             </Infobox>
         </Container>
     );

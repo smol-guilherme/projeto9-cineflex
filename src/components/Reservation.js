@@ -24,9 +24,9 @@ export default function Reservation() {
     const { idSession } = useParams();
 
     const [day, setDay] = useState([])
-    const [seats, setSeats] = useState([]);
     const [session, setSession] = useState([]);
     const [movieData, setMovieData] = useState([]);
+    const [seats, setSeats] = useState([]);
     // const [tickets, setTickets] = useState([]); 
 
     useEffect(() => {
@@ -86,7 +86,7 @@ export default function Reservation() {
                     break;
             }
         }
-        console.log(buyers)
+        // console.log(buyers)
         const names = formSeats.map((seat) => {
             return seat.name
         })
@@ -104,7 +104,7 @@ export default function Reservation() {
         promise.then((response) => {
             console.log(request, response.data)
             const info = {...request, ids: names }
-            navigate("/sucesso", { replace: true, state: { movie: movieData, info: info }} )
+            navigate("/sucesso", { replace: true, state: { movie: session, info: info }} )
         });
     }
 
@@ -130,7 +130,7 @@ export default function Reservation() {
     )    
 }
 
-const Header = styled.div`
+const Header = styled.h1`
     display: flex;
     justify-content: center;
     align-items: center;

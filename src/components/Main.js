@@ -73,7 +73,7 @@ const Poster = styled.div`
     }
 `
 
-const Header = styled.div`
+const Header = styled.h1`
     display: flex;
     justify-content: center;
     align-items: center;
