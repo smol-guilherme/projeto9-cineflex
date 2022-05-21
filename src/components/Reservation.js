@@ -99,8 +99,9 @@ export default function Reservation() {
             }
             else if(!seat.isSelected && reserved.includes(seat.name)) {
                 const index = newReserve.indexOf(seat.name)
+
                 newReserve.splice(index, 1);
-                newForms.splice(index, 1)
+                newForms.splice(index, 1);
                 return {...seat}
             } 
             return null
@@ -171,7 +172,7 @@ const Header = styled.h1`
     align-items: center;
     height: 30px;
     width: 100%;
-    margin-top: 30px;
+    margin-top: 25px;
     text-align: center;
     font-size: 24px;
 `
@@ -192,10 +193,11 @@ const Seats = styled.div`
     flex-wrap: wrap;
     justify-content: space-around;
     width: 100%;
-    height: auto;
-    margin: 20px 0;
+    height: fit-content;
+    margin: 15px 0;
     padding: 0 5%;
     box-sizing: border-box;
+    overflow-y: hidden;
 `
 
 const Seat = styled.div`

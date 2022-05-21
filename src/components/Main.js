@@ -79,7 +79,7 @@ const Header = styled.h1`
     align-items: center;
     height: 30px;
     width: 100%;
-    margin-top: 30px;
+    margin-top: 25px;
     text-align: center;
     font-size: 24px;
 `

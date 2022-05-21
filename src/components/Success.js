@@ -108,7 +108,7 @@ const Header = styled.h1`
     text-align: center;
     height: 30px;
     width: 100%;
-    margin-top: 30px;
+    margin-top: 25px;
     font-size: 24px;
     font-weight: bold;
     color: #247A6B;

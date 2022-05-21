@@ -1,5 +1,6 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import React from 'react-dom';
+import GlobalStyle from '../assets/globalStyles';
 
 import Header from './Header';
 import Main from './Main';
@@ -11,6 +12,7 @@ export default function App() {
     
     return (
         <BrowserRouter>
+            <GlobalStyle />
             <Header />
             <Routes>
                 <Route path="/" element={<Main />} />
