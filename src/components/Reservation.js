@@ -5,13 +5,46 @@ import styled from 'styled-components';
 
 import Footer from './Footer';
 
-function Forms() {
+function Forms({ seat = "", setForms, forms, index }) {
+    
+    function handleData(event, seatIndex, isName) {
+        const newForms = [...forms]
+        
+        newForms.map((reservation, index) => {
+            if(index === seatIndex) {
+                if (isName) {
+                    reservation.nome = event.target.value
+                }
+                else {
+                    reservation.cpf = event.target.value
+                }
+                return {...reservation}
+            } else {
+                return {...reservation}
+            }
+        })
+        setForms([...newForms])
+    }
     return(
         <>
-                <label>Nome do comprador:</label>
-                <input type='text' placeholder='Digite seu nome...' required />
+                { seat === "" ? <label>Nome do comprador:</label> : <label>Nome do comprador: (Poltrona {seat})</label> }
+                <input 
+                    type='text'
+                    placeholder='Digite seu nome...'
+                    value={forms.nome}
+                    onChange={(e) => handleData(e, index, true)}
+                    required
+                />
                 <label>CPF do comprador:</label>
-                <input type='number' placeholder='Digite ceu CPF' required />
+                <input
+                    type='text'
+                    placeholder='Digite ceu CPF'
+                    value={forms.cpf}
+                    onChange={(e) => handleData(e, index, false)}
+                    minLength={11}
+                    maxLength={11}
+                    required
+                />
         </>
     )
 }
@@ -20,13 +53,17 @@ const BASE_URL = 'https://mock-api.driven.com.br/api/v5/cineflex/' // showtimes/
 
 export default function Reservation() {
     const navigate = useNavigate();
+
     const { idSession } = useParams();
 
     const [day, setDay] = useState([])
     const [session, setSession] = useState([]);
     const [movieData, setMovieData] = useState([]);
+
     const [seats, setSeats] = useState([]);
-    // const [tickets, setTickets] = useState([]); 
+    const [reserved, setReserved] = useState([]);
+
+    const [forms, setForms] = useState([])
 
     useEffect(() => {
         const promise = axios.get(BASE_URL+`showtimes/${idSession}/seats`)
@@ -46,12 +83,31 @@ export default function Reservation() {
             alert('Esse assento não está disponível');
             return;
         }
-        let newSeats = seats.map((seat, index) => {
+        const newSeats = seats.map((seat, index) => {
             if (seatNum === index)
                 return { ...seat, isSelected: !seat.isSelected }
             else
                 return seat
         });
+        const newForms = [...forms]
+        const newReserve = [...reserved]
+        newSeats.filter((seat) => {
+            if (seat.isSelected && !reserved.includes(seat.name)) {
+                newReserve.push(seat.name);
+                newForms.push({ idAssento: Number(seat.name), nome: '', cpf: '' })
+                return {...seat}
+            }
+            else if(!seat.isSelected && reserved.includes(seat.name)) {
+                const index = newReserve.indexOf(seat.name)
+                newReserve.splice(index, 1);
+                newForms.splice(index, 1)
+                return {...seat}
+            } 
+            return null
+        })
+
+        setReserved([...newReserve]);
+        setForms([...newForms])
         setSeats([...newSeats]);
     }
 
@@ -66,38 +122,18 @@ export default function Reservation() {
                 return null
             }
         })
-        const buyerData = {};
-        const buyers = [];
-        for(let item of event.target) {
-            switch(item.type) {
-                case 'number':
-                    buyerData.cpf = item.value
-                    buyers.push({...buyerData});
-                    break;
-                case 'text':
-                    buyerData.name = item.value
-                    break;
-                default:
-                    break;
-            }
-        }
-        // console.log(buyers)
-        const names = formSeats.map((seat) => {
-            return seat.name
-        })
+
         const ids = formSeats.map((seat) => {
             return seat.id;
         })
-        const { name, cpf } = { ...buyerData }
+
         const request = {
             ids: ids,
-            name: name,
-            cpf: cpf
+            compradores: [...forms]
         }
-        // console.log(request)
         const promise = axios.post(BASE_URL+'seats/book-many', request);
         promise.then((response) => {
-            const info = {...request, ids: names }
+            const info = [...forms]
             navigate("/sucesso", { replace: true, state: { movie: session, info: info }} )
         });
     }
@@ -115,7 +151,12 @@ export default function Reservation() {
                     <Box><Seat isAvailable={false}></Seat>Indisponível</Box>
                 </Tooltip>
                 <InputWrapper onSubmit={handleSubmit}>
-                    <Forms />
+                    <Formsbox>
+                        { 
+                            reserved.length > 0 && reserved.map((seatNum, index) => 
+                                <Forms key={seatNum} seat={seatNum} index={index} setForms={setForms} forms={forms} /> ) 
+                        }
+                    </Formsbox>
                     <Submit type='submit'>Reservar assento(s)</Submit>
                 </InputWrapper>
             </Seats>
@@ -202,7 +243,7 @@ const InputWrapper = styled.form`
     input {
         display: flex;
         width: 100%;
-        height: 40px;
+        min-height: 40px;
         padding: 2px 8px;
         margin: 6px 0;
         border-radius: 3px;
@@ -250,5 +291,10 @@ const Submit = styled.button`
     }
 `
 
-// '#FBE192'
-// '1px solid #F7C52B'
+const Formsbox = styled.div`
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    height: 160px;
+    overflow-y: scroll;
+`

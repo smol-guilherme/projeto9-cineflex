@@ -5,11 +5,11 @@ import styled from 'styled-components';
 
 function Infobox({ header = "", main = "", info = "", extra="" }) {
     return(
-        <Container>
-            <Info>{header}</Info>
-            { typeof main === "object" ? main.map((data, index) => <Info key={index}>{extra} {data}</Info>) : <Info>{extra} {main}</Info> }
-            <Info>{info}</Info>
-        </Container>
+        <>
+            <Title>{header}</Title>
+            <Info>{extra} {main}</Info>
+            { info ? <Info>{info}</Info> : ""}
+        </>
     )
 }
 
@@ -24,12 +24,7 @@ export default function Success() {
     const [movieData, setMovieData] = useState([]);
 
     useEffect(() => {
-        const ids = state.info.ids.map((item) => item)
-        // const names = state.info.names.map((item) => item)
-        // const cpfs = state.info.cpfs.map((item) => item)
-        const names = state.info.name
-        const cpfs = state.info.cpf
-        setClientData({ ids, names, cpfs });
+        setClientData([...state.info])
 
         const title = state.movie.movie.title
         const date = state.movie.day.date + " " + state.movie.name
@@ -37,28 +32,24 @@ export default function Success() {
     }, [])
 
     function backHome() {
-        setClientData([])
-        setMovieData([])
-        navigate('/')
+        setClientData([]);
+        setMovieData([]);
+        navigate('/');
     }
 
     return (
         <Content>
             <Header>Pedido feito com sucesso!</Header>
-            <Infobox header="Filme e sessão" title={movieData.title ? movieData.title : ""} main={movieData.date ? movieData.date : "29/04/1994 23:55"}  />
-            {
-            clientData.hasOwnProperty('names') 
-                ? 
-                    <>
-                        <Infobox header={'Ingressos'} main={clientData.ids} extra={'Assento'} />
-                        <Infobox header={'Comprador'} main={`Nome: ${clientData.names}`} info={`CPF: ${clientData.cpfs}`} />
-                    </>
-                : 
-                    <>
-                        <Infobox key={0} header={'Ingresso'} main={'Assento 38'} />
-                        <Infobox key={-1} header={'Comprador'} main={'Nome: Template da Silva'} info={'CPF: 1234567890'} />
-                    </>
-            }
+            <Container>
+                <Infobox header="Filme e sessão" main={movieData.title ? movieData.title : ""} info={movieData.date ? movieData.date : "29/04/1994 23:55"} />
+            </Container>
+            <Infowrapper>
+                { clientData.length && clientData.map((client, index) => 
+                <Container key={index}>
+                    <Infobox header={'Ingresso'} main={client.idAssento} extra={'Assento'} />
+                    <Infobox header={'Comprador'} main={`Nome: ${client.nome}`} info={`CPF: ${client.cpf}`} />
+                </Container> )}
+            </Infowrapper>
             <Button onClick={backHome}>Voltar para Home</Button>
         </Content>
     )
@@ -76,23 +67,39 @@ const Content = styled.div`
     overflow-x: none;
 `
 
+const Infowrapper = styled.div`
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    height: 360px;
+    overflow-y: scroll;
+`
+
 const Container = styled.ul`
     display: flex;
     flex-direction: column;
     width: 100%;
 
-    li:first-of-type {
-        font-weight: bold;
-        font-size: 24px;
-        padding-top: 24px;
-        padding-bottom: 10px;
+    li { 
+        overflow-x: hidden;
     }
 `
 
 const Info = styled.li`
+    width: 80%;
+    min-height: 30px;
     padding: 3px 20px;
     font-size: 22px;
-    width: 100%;
+`
+
+const Title = styled.li`
+    width: 80%;
+    min-height: 30px;
+    font-weight: bold;
+    font-size: 24px;
+    padding: 3px 20px;
+    padding-top: 16px;
+    padding-bottom: 8px;
 `
 
 const Header = styled.h1`

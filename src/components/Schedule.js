@@ -5,7 +5,7 @@ import styled from 'styled-components'
 
 import Footer from './Footer';
 
-const BASE_URL = 'https://mock-api.driven.com.br/api/v5/cineflex/' // movies/id/showtime
+const BASE_URL = 'https://mock-api.driven.com.br/api/v5/cineflex/'
 
 function Session({ weekday, date, showtimes }) {
     return(

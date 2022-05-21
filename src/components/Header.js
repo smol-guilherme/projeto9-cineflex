@@ -8,8 +8,6 @@ function Back({ navigate }){
 export default function Header() {
     const location = useLocation();
     const navigate = useNavigate();
-    console.log(location)
-
     return(
         <Container>
             { location.pathname !== '/' ? <Back navigate={navigate} /> : ''}
@@ -42,8 +40,5 @@ const Icon = styled.div`
     left: 3%;
     color: #E8833A;
     font-size: 36px;
-
-    &:hover {
-        cursor: pointer;
-    }
+    cursor: pointer;
 `
