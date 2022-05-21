@@ -18,8 +18,6 @@ export default function Success() {
     const navigate = useNavigate();
     const state = location.state
 
-    console.log(state)
-    
     const [clientData, setClientData] = useState([]);
     const [movieData, setMovieData] = useState([]);
 
@@ -45,10 +43,11 @@ export default function Success() {
             </Container>
             <Infowrapper>
                 { clientData.length && clientData.map((client, index) => 
-                <Container key={index}>
-                    <Infobox header={'Ingresso'} main={client.idAssento} extra={'Assento'} />
-                    <Infobox header={'Comprador'} main={`Nome: ${client.nome}`} info={`CPF: ${client.cpf}`} />
-                </Container> )}
+                    <Container key={index}>
+                        <Infobox header={'Ingresso'} main={client.idAssento} extra={'Assento'} />
+                        <Infobox header={'Comprador'} main={`Nome: ${client.nome}`} info={`CPF: ${client.cpf}`} />
+                    </Container>
+                )}
             </Infowrapper>
             <Button onClick={backHome}>Voltar para Home</Button>
         </Content>

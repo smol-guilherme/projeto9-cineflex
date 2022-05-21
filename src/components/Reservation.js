@@ -49,7 +49,7 @@ function Forms({ seat = "", setForms, forms, index }) {
     )
 }
 
-const BASE_URL = 'https://mock-api.driven.com.br/api/v5/cineflex/' // showtimes/id/seats
+const BASE_URL = 'https://mock-api.driven.com.br/api/v5/cineflex/'
 
 export default function Reservation() {
     const navigate = useNavigate();
