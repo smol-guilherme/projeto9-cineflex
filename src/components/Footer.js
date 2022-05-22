@@ -21,7 +21,7 @@ const Container = styled.div`
     border-top: 1px solid #9EADBA;
     background-color: #DFE6ED;
     color: #293845;
-    height: 14vh;
+    min-height: 14vh;
     width: 100%;
     font-size: 26px;
     position: fixed;
