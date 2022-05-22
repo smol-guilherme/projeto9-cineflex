@@ -35,6 +35,10 @@ export default function Success() {
         navigate('/');
     }
 
+    function formatDoc(doc) {
+        return `${doc.substring(0,3)+'.'+doc.substring(3,6)+'.'+doc.substring(6,9)+'-'+doc.substring(9)}`
+    }
+
     return (
         <Content>
             <Header>Pedido feito com sucesso!</Header>
@@ -45,7 +49,7 @@ export default function Success() {
                 { clientData.length && clientData.map((client, index) => 
                     <Container key={index}>
                         <Infobox header={'Ingresso'} main={client.idAssento} extra={'Assento'} />
-                        <Infobox header={'Comprador'} main={`Nome: ${client.nome}`} info={`CPF: ${client.cpf}`} />
+                        <Infobox header={'Comprador'} main={`Nome: ${client.nome}`} info={`CPF: ${formatDoc(client.cpf)}`} />
                     </Container>
                 )}
             </Infowrapper>
@@ -59,8 +63,7 @@ const Content = styled.div`
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    margin: 10vh auto;
-    margin-bottom: 14vh;
+    margin: 8vh auto;
     width: 100%;
     background-color: #FFFFFF;
     overflow-x: none;
@@ -109,6 +112,8 @@ const Header = styled.h1`
     height: 30px;
     width: 100%;
     margin-top: 25px;
+    margin-bottom: 10px;
+    padding: 0 20px;
     font-size: 24px;
     font-weight: bold;
     color: #247A6B;

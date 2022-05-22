@@ -77,20 +77,42 @@ export default function Reservation() {
             setSeats(newSeats)
         })
     }, []);
-
-    function seatReservation(seatNum) {
-        if(!seats[seatNum].isAvailable) {
+    
+    function seatReservation(seatIndex) {
+        if(!seats[seatIndex].isAvailable) {
             alert('Esse assento não está disponível');
             return;
         }
-        const newSeats = seats.map((seat, index) => {
-            if (seatNum === index)
-                return { ...seat, isSelected: !seat.isSelected }
-            else
-                return seat
-        });
+        function isEmpty(select) {
+            return (newForms[select].nome !== '' || newForms[select].cpf !== '')
+        }
+        
         const newForms = [...forms]
         const newReserve = [...reserved]
+        
+        if(seats[seatIndex].isSelected) {
+            let select = 0;
+            newForms.map((item, index) => {
+                if ((seatIndex + 1) === item.idAssento)
+                    select = index;
+                return item;
+            })
+            if(isEmpty(select)) {
+                if(!window.confirm("Tem certeza que deseja remover este assento?")) {
+                    return;
+                }
+            }
+        }
+
+        const newSeats = seats.map((seat, index) => {
+            if (seatIndex === index) {
+                return { ...seat, isSelected: !seat.isSelected }
+            }
+            else {
+                return seat
+            }
+        });
+        
         newSeats.filter((seat) => {
             if (seat.isSelected && !reserved.includes(seat.name)) {
                 newReserve.push(seat.name);
@@ -99,7 +121,6 @@ export default function Reservation() {
             }
             else if(!seat.isSelected && reserved.includes(seat.name)) {
                 const index = newReserve.indexOf(seat.name)
-
                 newReserve.splice(index, 1);
                 newForms.splice(index, 1);
                 return {...seat}
@@ -132,6 +153,7 @@ export default function Reservation() {
             ids: ids,
             compradores: [...forms]
         }
+        
         const promise = axios.post(BASE_URL+'seats/book-many', request);
         promise.then((response) => {
             const info = [...forms]
@@ -151,16 +173,16 @@ export default function Reservation() {
                     <Box><Seat isAvailable={true} ></Seat>Disponível</Box>
                     <Box><Seat isAvailable={false}></Seat>Indisponível</Box>
                 </Tooltip>
-                <InputWrapper onSubmit={handleSubmit}>
-                    <Formsbox>
-                        { 
-                            reserved.length > 0 && reserved.map((seatNum, index) => 
-                                <Forms key={seatNum} seat={seatNum} index={index} setForms={setForms} forms={forms} /> ) 
-                        }
-                    </Formsbox>
-                    <Submit type='submit'>Reservar assento(s)</Submit>
-                </InputWrapper>
             </Seats>
+            <InputWrapper onSubmit={handleSubmit}>
+                <Innerbox>
+                    { 
+                        reserved.length > 0 && reserved.map((seatNum, index) => 
+                            <Forms key={seatNum} seat={seatNum} index={index} setForms={setForms} forms={forms} /> ) 
+                    }
+                </Innerbox>
+                <Submit disabled={ reserved.length > 0 ? false : true } recolor={reserved.length} type='submit'>Reservar assento(s)</Submit>
+            </InputWrapper>
             <Footer poster={movieData.posterURL} weekday={day.weekday} title={movieData.title} name={session.name} />
         </Content>
     )    
@@ -182,7 +204,7 @@ const Content = styled.div`
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    margin: 10vh auto;
+    margin: 8vh auto;
     margin-bottom: 14vh;
     width: 100%;
     background-color: #FFFFFF;
@@ -195,7 +217,7 @@ const Seats = styled.div`
     width: 100%;
     height: fit-content;
     margin: 15px 0;
-    padding: 0 5%;
+    padding: 0 3vw;
     box-sizing: border-box;
     overflow-y: hidden;
 `
@@ -208,10 +230,14 @@ const Seat = styled.div`
     width: 25px;
     height: 25px;
     font-size: 11px;
-    margin: 2px;
+    margin: 5px;
     color: black;
     background-color: ${ props => props.isSelected ? '#8DD7CF' : props.isAvailable ? '#C3CFD9' : '#FBE192' };
     border: ${ props => props.isSelected ? '1px solid #1AAE9E' : props.isAvailable ? '1px solid #7B8B99' : '1px solid #F7C52B' };
+
+    @media (max-width: 411px) {
+        margin: 3px;
+    }
 `
 
 const Tooltip = styled.div`
@@ -239,8 +265,10 @@ const InputWrapper = styled.form`
     width: 100%;
     height: auto;
     margin: 10px 0;
+    padding: 0 3%;
     font-size: 18px;
     color: #293845;
+    box-sizing: border-box;
     
     input {
         display: flex;
@@ -260,12 +288,6 @@ const InputWrapper = styled.form`
         color: #AFAFAF;
     }
 
-    input::-webkit-outer-spin-button,
-    input::-webkit-inner-spin-button {
-        -webkit-appearance: none;
-        margin: 0;
-    }
-
     input[type=number] {
         -moz-appearance: textfield;
     }
@@ -279,13 +301,14 @@ const Submit = styled.button`
     align-items: center;
     text-align: center;
     margin: 0 auto;
-    margin-top: 50px;
+    margin-top: 20px;
     padding: 10px;
     border-radius: 5px;
-    background-color: #E8833A;
+    background-color: ${ props => props.recolor ? '#E8833A' : '#C3CFD9' };
     color: #FFFFFF;
     font-size: 18px;
     border: none;
+    
     box-sizing: border-box;
 
     &:hover {
@@ -293,10 +316,16 @@ const Submit = styled.button`
     }
 `
 
-const Formsbox = styled.div`
+const Innerbox = styled.div`
     display: flex;
     flex-direction: column;
     width: 100%;
     height: 160px;
+    -ms-overflow-style: none;
+    scrollbar-width: none;
     overflow-y: scroll;
+
+    &::-webkit-scrollbar {
+        display: none;
+    }
 `
