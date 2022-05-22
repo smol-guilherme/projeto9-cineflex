@@ -36,7 +36,7 @@ const Icon = styled.div`
     position: fixed;
     width: 30px;
     height: 30px;
-    top: 2%;
+    top: 1.5%;
     left: 3%;
     color: #E8833A;
     font-size: 36px;
