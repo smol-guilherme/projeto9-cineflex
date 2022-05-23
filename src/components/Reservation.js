@@ -32,17 +32,18 @@ function Forms({ seat = "", setForms, forms, index }) {
                     type='text'
                     placeholder='Digite seu nome...'
                     value={forms.nome}
+                    maxLength={127}
                     onChange={(e) => handleData(e, index, true)}
                     required
                 />
-                <label>CPF do comprador:</label>
+                <label>CPF do comprador: </label>
                 <input
                     type='text'
                     placeholder='Digite ceu CPF'
                     value={forms.cpf}
                     onChange={(e) => handleData(e, index, false)}
-                    minLength={11}
-                    maxLength={11}
+                    pattern={"[0-9]{11}"}
+                    title={"Digite apenas numeros"}
                     required
                 />
         </>
@@ -157,7 +158,7 @@ export default function Reservation() {
         const promise = axios.post(BASE_URL+'seats/book-many', request);
         promise.then((response) => {
             const info = [...forms]
-            navigate("/sucesso", { replace: true, state: { movie: session, info: info }} )
+            navigate("/sucesso", { state: { movie: session, info: info }} )
         });
     }
 

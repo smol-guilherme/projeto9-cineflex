@@ -128,7 +128,7 @@ const Button = styled.button`
     align-items: center;
     text-align: center;
     margin: 0 auto;
-    margin-top: 50px;
+    margin-top: 25px;
     padding: 10px;
     border-radius: 5px;
     background-color: #E8833A;
